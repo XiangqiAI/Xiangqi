@@ -1,10 +1,5 @@
 # Xiangqi
 
-> DeepRed
->
-> Make AI great again.
->
-> 不离家不返校 不信谣不传谣
->
-> Test.
+> 可下载图形界面查看效果
+> 运行程序 python play.py
 
