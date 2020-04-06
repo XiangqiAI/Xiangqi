@@ -20,7 +20,7 @@ class Chessboard():
         self.chessboard[8][6] = Bing(8, 6) 
         self.chessboard[1][7] = Pao(1, 7) 
         self.chessboard[7][7] = Pao(7, 7) 
-        self.chessboard[0][9] = Che(0, 9) 
+        self.chessboard[0][9] = Che(0, 9)
         self.chessboard[8][9] = Che(8, 9) 
         self.chessboard[1][9] = Ma(1, 9) 
         self.chessboard[7][9] = Ma(7, 9) 
