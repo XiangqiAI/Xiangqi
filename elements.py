@@ -7,6 +7,9 @@ class Chess():
     def position(self):#获取位置
         return (self.x,self.y)
     
+    def set_position(self, pos):
+        self.x, self.y = pos
+        
     def d_position(self, start_position, end_position):#位移差
         dx = end_position[0] - start_position[0]
         dy = end_position[1] - start_position[1]
@@ -319,6 +322,25 @@ class Shuai(Chess):
     def can_move(self, start_position, end_position, chessboard):
         x, y = end_position
         dx, dy = self.d_position(start_position, end_position)
+        for i in chessboard:#判断是否有白脸将
+            for p in i:
+                if p == 0: 
+                    continue
+                if p.name == '帅':
+                    if p.red != self.red:
+                        a = p
+        x1, y1 = a.position()
+        if x1 == x:
+            if y1 > y:
+                c = y1
+                y1 = y
+                y = c
+            flag = 0
+            for i in range(y1+1, y):
+                if chessboard[x1][i]:
+                    flag = 1
+            if flag == 0:
+                return False
         if self.rule(dx, dy, end_position):
             if not self.position_has_chess(end_position, chessboard):#终点处无棋子
                 return True

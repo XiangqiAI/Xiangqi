@@ -20,7 +20,7 @@ class Chessboard():
         self.chessboard[8][6] = Bing(8, 6) 
         self.chessboard[1][7] = Pao(1, 7) 
         self.chessboard[7][7] = Pao(7, 7) 
-        self.chessboard[0][9] = Che(0, 9)
+        self.chessboard[0][9] = Che(0, 9) 
         self.chessboard[8][9] = Che(8, 9) 
         self.chessboard[1][9] = Ma(1, 9) 
         self.chessboard[7][9] = Ma(7, 9) 
@@ -54,7 +54,7 @@ class Chessboard():
             return False
         return True
 
-    def can_move(self, start_position, end_position):
+    def could_move(self, start_position, end_position):
         x, y = start_position
         if not self.check(start_position) or not self.check(end_position):#位置越界
             return False
@@ -73,3 +73,53 @@ class Chessboard():
         self.chessboard[z][w] = self.chessboard[x][y]
         self.chessboard[x][y] = 0
         return True
+
+    def killing(self):
+        b = []
+        red = self.red_move
+        chessboard = self.chessboard
+        for i in chessboard:
+            for y in i:
+                if y == 0: 
+                    continue
+                if y.name == '帅' and y.red == red:
+                    a = y
+                if y.red != red:
+                    if y.name == '炮' or y.name == '马' or y.name == '车' or y.name == '兵':
+                        b.append(y)
+        x, y = a.position()
+        for i in b:
+            if i.can_move(i.position(), (x,y), chessboard): 
+                return True
+        return False
+    
+    def win(self):
+        chesses = []
+        red = self.red_move
+        chessboard = self.chessboard
+        flag = 1
+        for i in chessboard:
+            for y in i:
+                if y == 0: 
+                    continue
+                if y.red == red: 
+                    chesses.append(y)
+        for i in chesses:
+            a = []
+            a = i.try_move(i.position(), chessboard)
+            for y in a:
+                if i.can_move(i.position(), y, chessboard):
+                    a,b = i.position()
+                    ea, eb = y
+                    temp = chessboard[a][b]
+                    tempe = chessboard[ea][eb]
+                    i.set_position(y)
+                    chessboard[ea][eb] = temp
+                    chessboard[a][b] = 0
+                    if self.killing() == 0:
+                        flag = 0
+                    i.set_position((a,b))
+                    chessboard[a][b] = temp
+                    chessboard[ea][eb] = tempe
+        return flag
+    
