@@ -27,13 +27,6 @@ class Chess():
         if x < 0 or y < 0 or x > 8 or y > 9:
             return False
         return True
-
-    def move(self, start_position, end_position, chessboard):#棋子移动
-        if self.can_move(start_position, end_position, chessboard):
-            self.x = end_position[0]
-            self.y = end_position[1]
-            return True
-        return False
    
     def position_has_chess(self, position, chessboard):#判断某个位置是否有棋子
         x, y = position
@@ -331,12 +324,8 @@ class Shuai(Chess):
                         a = p
         x1, y1 = a.position()
         if x1 == x:
-            if y1 > y:
-                c = y1
-                y1 = y
-                y = c
             flag = 0
-            for i in range(y1+1, y):
+            for i in range(min(y1, y)+1, max(y1, y)):
                 if chessboard[x1][i]:
                     flag = 1
             if flag == 0:

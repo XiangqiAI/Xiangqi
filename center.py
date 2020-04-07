@@ -66,12 +66,21 @@ class Chessboard():
         else:
             if self.chessboard[x][y].red:
                 return False 
-        if not self.chessboard[x][y].move(start_position, end_position, self.chessboard):#该棋子不能动
+        if not self.chessboard[x][y].can_move(start_position, end_position, self.chessboard):#该棋子不能动
             return False
-        self.red_move = not self.red_move
         z, w = end_position
+        self.chessboard[x][y].x = end_position[0]
+        self.chessboard[x][y].y = end_position[1]
         self.chessboard[z][w] = self.chessboard[x][y]
         self.chessboard[x][y] = 0
+        if self.killing():
+            self.chessboard[z][w].x = x
+            self.chessboard[z][w].y = y
+            self.chessboard[x][y] = self.chessboard[z][w]
+            self.chessboard[z][w] = 0
+            print('不能送将')
+            return False
+        self.red_move = not self.red_move
         return True
 
     def killing(self):
@@ -121,5 +130,7 @@ class Chessboard():
                     i.set_position((a,b))
                     chessboard[a][b] = temp
                     chessboard[ea][eb] = tempe
+                    if flag == 0:
+                        return flag 
         return flag
     

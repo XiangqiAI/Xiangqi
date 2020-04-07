@@ -67,15 +67,15 @@ def pvp():
                         if side.position == from_side:#棋子从出发位置移动
                             side.move(to_side)
                     from_side =  (-1,-1) #出发位置赋值为空
-                    if chess_board.killing():
-                        if chess_board.win():
-                            if chess_board.red_move :
-                                print('黑方胜')
-                            else:
-                                print('红方胜')
-                            flag = 0
+                    if chess_board.win():
+                        if chess_board.red_move :
+                            print('黑方胜')
                         else:
-                            print('将军')
+                            print('红方胜')
+                        flag = 0
+                        break
+                    elif chess_board.killing():
+                        print('将军')
                 else: #出发位置未赋值或者结束位置不合法
                     from_side = to_side #将出发位置设置为鼠标点击位置
             elif event.type == pygame.QUIT:#退出游戏
@@ -125,15 +125,16 @@ def pvc():
                             side.kill()
                         if side.position == from_side:#棋子从出发位置移动
                             side.move(to_side)
-                    if chess_board.killing():
-                        if chess_board.win():
-                            if chess_board.red_move :
-                                print('黑方胜')
-                            else:
-                                print('红方胜')
-                            flag = 0
+                    if chess_board.win():
+                        if chess_board.red_move :
+                            print('黑方胜')
                         else:
-                            print('将军')
+                            print('红方胜')
+                        flag = 0
+                        break
+                    elif chess_board.killing():
+                        print('将军')
+                    from_side = (-1, -1)
                     b = []
                     for a in chess_board.chessboard:#a为每列所有元素
                         for side in a:#b为a中每个位置的元素
@@ -141,25 +142,25 @@ def pvc():
                                 if side.red == chess_board.red_move:
                                     if len(side.try_move(side.position(), chess_board.chessboard)):
                                         b += [(side.position(), side.try_move(side.position(), chess_board.chessboard))]
-                    i = random.choice(range(0, len(b)))
-                    from_side, to_sides = b[i]
-                    j = random.choice(range(0, len(to_sides)))
-                    to_side = to_sides[j]
-                    chess_board.could_move(from_side, to_side)
+                    while chess_board.could_move(from_side, to_side) == 0:
+                        i = random.choice(range(0, len(b)))
+                        from_side, to_sides = b[i]
+                        j = random.choice(range(0, len(to_sides)))
+                        to_side = to_sides[j]
                     for side in all_chess:#寻找移动的棋子位置
                         if side.position == to_side:#棋子被吃
                             side.kill()
                         if side.position == from_side:#棋子从出发位置移动
                             side.move(to_side)
-                    if chess_board.killing():
-                        if chess_board.win():
-                            if chess_board.red_move :
-                                print('黑方胜')
-                            else:
-                                print('红方胜')
-                            flag = 0
+                    if chess_board.win():
+                        if chess_board.red_move :
+                            print('黑方胜')
                         else:
-                            print('将军')
+                            print('红方胜')
+                        flag = 0
+                        break
+                    elif chess_board.killing():
+                        print('将军')
                     from_side =  (-1,-1) #出发位置赋值为空
                 else: #出发位置未赋值或者结束位置不合法
                     from_side = to_side #将出发位置设置为鼠标点击位置
