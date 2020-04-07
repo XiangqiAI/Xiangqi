@@ -1,9 +1,9 @@
-from center import Chessboard
+from game import Chessboard
 import pygame
 import random
 import os
 
-data_dir = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'source')
+data_dir = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'src')
 
 class start_game(pygame.sprite.Sprite):
     def __init__(self):
