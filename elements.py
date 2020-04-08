@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from abc import abstractmethod
 
 
@@ -55,9 +56,9 @@ class Chess:
 		:return: True: 在己侧；False: 不在己侧
 		"""
 		y = self.position[1]
-		if self.red and y > 4:
+		if self.red and y < 5:
 			return False
-		elif not self.red and y < 5:
+		elif not self.red and y > 4:
 			return False
 		return True
 
@@ -82,8 +83,8 @@ class Chess:
 		"""
 		x, y = pos
 		if x < 0 or y < 0 or x > 8 or y > 9:
-			return False
-		return True
+			return True
+		return False
 
 	@staticmethod
 	def position_has_chess(position, chessboard):
@@ -120,13 +121,14 @@ class Chess:
 		"""
 		x, y = self.position
 		x_to, y_to = end_position
-		dx = 1 if x != x_to else 0
-		dy = 1 if y != y_to else 0
+		dx, dy = self.d_position(end_position)
+		dx = dx/abs(dx) if x != x_to else 0
+		dy = dy/abs(dy) if y != y_to else 0
 		num = 0
 		while x != x_to or y != y_to:
 			x += dx
 			y += dy
-			if chessboard[x, y]:
+			if chessboard[int(x), int(y)]:
 				num += 1
 		return num
 
@@ -139,8 +141,9 @@ class Chess:
 		"""
 		legal_pos = []
 		for pos in self.pos_list:
-			if not self.is_out(pos) and self.is_legal_move(pos, chessboard):
-				legal_pos.append(pos)
+			if not self.is_out(pos):
+				if self.is_legal_move(pos, chessboard):
+					legal_pos.append(pos)
 		return legal_pos
 
 
@@ -160,13 +163,13 @@ class Bing(Chess):
 	def is_legal_action(self, dx, dy, end_position=None):
 		if abs(dx) + abs(dy) != 1:
 			return False
-		if self.is_inplace():  # 兵没有过河
-			if (self.red and dy == 1 and dx == 0) or (not self.red and dy == -1 and dx == 0):
+		if self.is_inplace():  	# 兵未过河
+			if (self.red and dy == -1 and dx == 0) or (not self.red and dy == 1 and dx == 0):
 				return True
 			else:
 				return False
-		else:  # 兵已过河
-			if (self.red and dy == -1) or (not self.red and dy == 1):
+		else:  					# 兵已过河
+			if (self.red and dy == 1) or (not self.red and dy == -1):
 				return False
 			else:
 				return True
@@ -174,13 +177,13 @@ class Bing(Chess):
 	def is_legal_move(self, end_position, chessboard):
 		x, y = end_position
 		dx, dy = self.d_position(end_position)
-		if self.is_legal_action(dx, dy):  # 走棋合法
+		if self.is_legal_action(dx, dy):  			# 走棋合法
 			if not self.position_has_chess(end_position, chessboard):  # 移动到的位置没棋子
 				return True
 			else:
-				if self.is_own(chessboard[x, y]):  # 本方棋子，不能吃
+				if self.is_own(chessboard[x, y]):  	# 本方棋子，不能吃
 					return False
-				else:  # 对方棋子，可以吃
+				else:  								# 对方棋子，可以吃
 					return True
 		else:
 			return False
@@ -264,7 +267,7 @@ class Ma(Chess):
 				return False
 		else:
 			x = int(x + dx / 2)
-			if not chessboard[x][y]:
+			if not chessboard[x, y]:
 				return False
 		return True
 
@@ -375,14 +378,15 @@ class Shuai(Chess):
 	def is_legal_move(self, end_position, chessboard):
 		x, y = end_position
 		dx, dy = self.d_position(end_position)
-		for i in chessboard:  # 判断是否有白脸将
-			if i.name == '帅':
+		for i in chessboard.values():  # 判断是否有白脸将
+			if i and i.name == '帅' and (i.red != self.red):
 				x_enemy, y_enemy = i.position
 				if x_enemy == x:
 					for y_pos in range(min(y_enemy, y) + 1, max(y_enemy, y)):
 						if chessboard[x, y_pos]:
 							break
 					else:
+						print('白脸将')
 						return False
 				break
 		if self.is_legal_action(dx, dy, end_position):
@@ -409,7 +413,7 @@ class Xiang(Chess):
 	def is_legal_action(self, dx, dy, end_position=None):
 		x, y = end_position
 		if abs(dx) == 2 and abs(dy) == 2:
-			if (self.red and y < 5) or (not self.red and y > 4):
+			if (self.red and y > 4) or (not self.red and y < 5):
 				return True
 		return False
 
