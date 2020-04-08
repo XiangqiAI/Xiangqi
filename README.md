@@ -6,7 +6,7 @@ python cchess.py
 
 ## 依赖
 
-pygame
+pip install pygame
 
 ## 文件结构
 
