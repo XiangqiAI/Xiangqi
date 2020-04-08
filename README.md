@@ -2,7 +2,11 @@
 
 ## 运行
 
-python cchess.py
+- python cchess.py
+
+- python cchess.py -m
+
+  静音进行游戏
 
 ## 依赖
 
