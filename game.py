@@ -8,7 +8,7 @@ class Game:
 	键为一个表示位置的元组，值为空或者一个棋子对象。
 	在调用的时候可以通过chessboard[x, y]来调用位于(x, y)的棋子
 
-	坐标原点在左上角
+	坐标原点在左上角，x轴向右，y轴向下
 	"""
 	def __init__(self):
 		self.red_move = True		# 当前是否红方回合
@@ -80,7 +80,7 @@ class Game:
 				if piece.red != self.red_move:								# 找到对方可以将军的棋子
 					if piece.name == '炮' or piece.name == '马' or piece.name == '车' or piece.name == '兵':
 						dangers.append(piece)
-		for danger in dangers:
+		for danger in dangers:												# 对每个棋子检查能否将军
 			if danger.is_legal_move(king.position, self.chessboard):
 				return True
 		return False
@@ -110,7 +110,7 @@ class Game:
 		self.chessboard[x, y].set_position(end_position)
 		self.chessboard[x_to, y_to] = self.chessboard[x, y]
 		self.chessboard[x, y] = None
-		if self.check():
+		if self.check():																# 检查是否送将，若是则取消移动
 			self.chessboard[x_to, y_to].set_position(start_position)
 			self.chessboard[x, y] = self.chessboard[x_to, y_to]
 			self.chessboard[x_to, y_to] = temp
@@ -126,10 +126,10 @@ class Game:
 		:return:
 		"""
 		pieces = []
-		for i in self.chessboard.values():		# 找到所有己方棋子
+		for i in self.chessboard.values():							# 找到所有己方棋子
 			if i and i.red == self.red_move:
 				pieces.append(i)
-		for piece in pieces:
+		for piece in pieces:										# 找到目前能做的所有事
 			for move in piece.possible_move(self.chessboard):
 				x, y = piece.position
 				x_to, y_to = move
@@ -137,7 +137,7 @@ class Game:
 				piece.set_position(move)
 				self.chessboard[x_to, y_to] = piece
 				self.chessboard[x, y] = None
-				if not self.check():
+				if not self.check():								# 依次检查能否摆脱将军
 					piece.set_position((x, y))
 					self.chessboard[x, y] = piece
 					self.chessboard[x_to, y_to] = temp

@@ -3,6 +3,7 @@ from game import Game
 import pygame
 import random
 import os
+import sys
 
 data_dir = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'src')
 
@@ -57,10 +58,11 @@ class Display:												# Todo: 实现摸子走子
 	def __init__(self):
 		self.screen = pygame.display.set_mode((720, 800))  	# 设置屏幕大小为（720，800），方便对应棋子位置
 
-	def begin(self):
+	def begin(self, is_muted):
 		pygame.mixer.init()
-		pygame.mixer.music.load(os.path.join(data_dir, 'easy_mode.wav'))
-		pygame.mixer.music.play(-1)
+		if not is_muted:
+			pygame.mixer.music.load(os.path.join(data_dir, 'easy_mode.wav'))
+			pygame.mixer.music.play(-1)
 		group = pygame.sprite.Group()
 		group.add(StartGame())
 		butt = pygame.sprite.Group()
@@ -204,8 +206,8 @@ class Display:												# Todo: 实现摸子走子
 			pieces.draw(self.screen)						# 显示所有棋子
 			pygame.display.flip()
 
-	def run(self):
-		self.begin()
+	def run(self, is_muted):
+		self.begin(is_muted)
 		while True:
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONDOWN:
@@ -220,6 +222,28 @@ class Display:												# Todo: 实现摸子走子
 					return
 
 
+def read_command(argv):
+	"""
+	Process the command used to run cchess from the command line.
+
+	:param argv:
+	:return:
+	"""
+	from optparse import OptionParser
+	usage_str = """
+	python cchess.py -m
+	- starts a muted game
+	"""
+	parser = OptionParser(usage_str)
+	parser.add_option('-m', '--mute', action='store_true', dest='isMuted', help='mute the game', default=False)
+	options, junk = parser.parse_args(argv)
+	if len(junk):
+		raise Exception('Options not expected' + str(junk))
+	args = dict()
+	args['is_muted'] = options.isMuted
+	return args
+
+
 if __name__ == '__main__':
 	cchess = Display()
-	cchess.run()
+	cchess.run(**read_command(sys.argv[1:]))
