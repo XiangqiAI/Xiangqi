@@ -121,7 +121,7 @@ class Display:												# Todo: 实现摸子走子
 		game = Game()
 		for piece in game.chessboard.values():		# 寻找所有棋子
 			if piece:
-				pieces.add((AddChess(piece.picture(), piece.position)))		# 将该棋子加入所有棋子的集合中
+				pieces.add((AddChess(piece.picture(), piece.position)))			# 将该棋子加入所有棋子的集合中
 		start = (-1, -1) 														# 棋子出发位置
 		red_or_black = random.randint(0, 1)
 		if red_or_black:														# 机器先手
@@ -206,19 +206,19 @@ class Display:												# Todo: 实现摸子走子
 			pieces.draw(self.screen)						# 显示所有棋子
 			pygame.display.flip()
 
-	def run(self, is_muted):
-		self.begin(is_muted)
+	def run(self, is_muted):								# 运行游戏
+		self.begin(is_muted)								# 开始画面
 		while True:
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					pos = convert_pos(pygame.mouse.get_pos())
-					if pos == (3, 4) or pos == (2, 4) or pos == (4, 4):
+					if pos == (3, 4) or pos == (2, 4) or pos == (4, 4):			# 点击双人对战按钮
 						self.pvp()
 						return
-					elif pos == (3, 7) or pos == (2, 7) or pos == (4, 7):
+					elif pos == (3, 7) or pos == (2, 7) or pos == (4, 7):		# 点击人机对战按钮
 						self.pvc()
 						return
-				elif event.type == pygame.QUIT:  # 退出游戏
+				elif event.type == pygame.QUIT:  								# 退出游戏
 					return
 
 
