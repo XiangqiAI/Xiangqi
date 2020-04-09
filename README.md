@@ -12,7 +12,7 @@
 
 pip install pygame
 
-## 文件结构,
+## 文件结构
 
 src: 存放棋盘、棋子、音乐文件
 
