@@ -63,13 +63,13 @@ class Display:												# Todo: 实现摸子走子
 		if not is_muted:
 			pygame.mixer.music.load(os.path.join(data_dir, 'easy_mode.wav'))
 			pygame.mixer.music.play(-1)
-		group = pygame.sprite.Group()
-		group.add(StartGame())
-		butt = pygame.sprite.Group()
-		butt.add(AddButton('pvp.jpg', (3, 4)))
-		butt.add(AddButton('pvc.jpg', (3, 7)))
-		group.draw(self.screen)
-		butt.draw(self.screen)
+		start_page = pygame.sprite.Group()
+		start_page.add(StartGame())
+		buttons = pygame.sprite.Group()
+		buttons.add(AddButton('pvp.jpg', (3, 4)))
+		buttons.add(AddButton('pvc.jpg', (3, 7)))
+		start_page.draw(self.screen)
+		buttons.draw(self.screen)
 		pygame.display.flip()
 
 	def pvp(self):
