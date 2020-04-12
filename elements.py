@@ -6,7 +6,15 @@ class Chess:
 	def __init__(self, position, red=True, selected=False):
 		self.position = position
 		self.red = red
+		self.name = ''
 		self.pos_list = []		# 将来的可能目标位置，由各派生类确定
+
+	def __str__(self):
+		if self.red:
+			color = 'R'
+		else:
+			color = 'B'
+		return '{} {} at {}'.format(color, self.name, self.position)
 
 	@abstractmethod
 	def picture(self):
