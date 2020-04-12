@@ -15,8 +15,8 @@ class Game:
 
 	坐标原点在左上角，x轴向右，y轴向下
 	"""
-	def __init__(self, chessboard=None):
-		self.red_move = True		# 当前是否红方回合
+	def __init__(self, chessboard=None, red_move=True):
+		self.red_move = red_move			# 当前是否红方回合
 		if chessboard:
 			self.chessboard = chessboard
 		else:
@@ -59,7 +59,7 @@ class Game:
 
 	def copy(self):
 		chessboard = deepcopy(self.chessboard)
-		game = Game(chessboard)
+		game = Game(chessboard, self.red_move)
 		return game
 
 	@staticmethod
@@ -104,7 +104,7 @@ class Game:
 		chessboard[x_to, y_to] = chessboard[x, y]
 		chessboard[x, y] = None
 
-		game = Game(chessboard)
+		game = Game(chessboard, not self.red_move)
 		return game
 
 	def check(self):
@@ -141,19 +141,19 @@ class Game:
 		chessboard = deepcopy(self.chessboard)
 		if not self.check_pos(start) or not self.check_pos(end):		# 位置越界
 			return False
-		if not chessboard[x, y]:														# 出发的位置不存在棋子
+		if not chessboard[x, y]:										# 出发的位置不存在棋子
 			return False
-		if self.red_move != chessboard[x, y].red:										# 走棋颜色错误
+		if self.red_move != chessboard[x, y].red:						# 走棋颜色错误
 			print('Not your turn')
 			return False
-		if not chessboard[x, y].is_legal_move(end, chessboard):							# 该棋子不能动
+		if not chessboard[x, y].is_legal_move(end, chessboard):			# 该棋子不能动
 			print('Illegal move')
 			return False
 		chessboard[x, y].set_position(end)
 		chessboard[x_to, y_to] = chessboard[x, y]
 		chessboard[x, y] = None
-		if self.check():																# 检查是否送将，若是则取消移动
-			print('不能送将')															# Todo: 把不能送将显示出来
+		if self.check():												# 检查是否送将
+			print('不能送将')												# Todo: 把不能送将显示出来
 			return False
 		return True
 
@@ -183,6 +183,7 @@ class Game:
 				chess.set_position(pos)
 				chessboard[x_to, y_to] = chess
 				chessboard[x, y] = None
-				if not self.check():								# 依次检查能否摆脱将军
+				game = Game(chessboard, self.red_move)
+				if not game.check():								# 依次检查能否摆脱将军
 					return False
 		return True
