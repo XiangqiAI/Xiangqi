@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import abstractmethod
+import traceback
 
 
 class Chess:
@@ -15,6 +16,14 @@ class Chess:
 		else:
 			color = 'B'
 		return '{}{} at {}'.format(color, self.name, self.position)
+
+	@abstractmethod
+	def get_pos_list(self):
+		"""
+		返回所有可能的后续坐标
+		:return:
+		"""
+		pass
 
 	@abstractmethod
 	def picture(self):
@@ -148,7 +157,7 @@ class Chess:
 		:return: 一个合法移动位置的列表: [(0, 1), (2, 3), ...]
 		"""
 		legal_pos = []
-		for pos in self.pos_list:
+		for pos in self.get_pos_list():
 			if not self.is_out(pos):
 				if self.is_legal_move(pos, chessboard):
 					legal_pos.append(pos)
@@ -161,6 +170,10 @@ class Bing(Chess):
 		self.name = '兵'
 		x, y = self.position
 		self.pos_list = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+
+	def get_pos_list(self):
+		x, y = self.position
+		return [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
 
 	def picture(self):
 		if self.red:
@@ -210,6 +223,16 @@ class Che(Chess):
 			(x, y - 8), (x, y - 9)
 		]
 
+	def get_pos_list(self):
+		x, y = self.position
+		return [
+			(x + 1, y), (x + 2, y), (x + 3, y), (x + 4, y), (x + 5, y), (x + 6, y), (x + 7, y), (x + 8, y),
+			(x - 1, y), (x - 2, y), (x - 3, y), (x - 4, y), (x - 5, y), (x - 6, y), (x - 7, y), (x - 8, y),
+			(x, y + 1), (x, y + 2), (x, y + 3), (x, y + 4), (x, y + 5), (x, y + 6), (x, y + 7), (x, y + 8),
+			(x, y + 9), (x, y - 1), (x, y - 2), (x, y - 3), (x, y - 4), (x, y - 5), (x, y - 6), (x, y - 7),
+			(x, y - 8), (x, y - 9)
+		]
+
 	def picture(self):
 		if self.red:
 			return 'red_rook.gif'
@@ -243,6 +266,13 @@ class Ma(Chess):
 		self.name = '马'
 		x, y = self.position
 		self.pos_list = [
+			(x + 1, y + 2), (x + 2, y + 1), (x - 1, y + 2), (x - 2, y + 1),
+			(x - 1, y - 2), (x - 2, y - 1), (x + 1, y - 2), (x + 2, y - 1)
+		]
+
+	def get_pos_list(self):
+		x, y = self.position
+		return [
 			(x + 1, y + 2), (x + 2, y + 1), (x - 1, y + 2), (x - 2, y + 1),
 			(x - 1, y - 2), (x - 2, y - 1), (x + 1, y - 2), (x + 2, y - 1)
 		]
@@ -303,6 +333,15 @@ class Pao(Chess):
 			(x, y + 9), (x, y - 1), (x, y - 2), (x, y - 3), (x, y - 4), (x, y - 5), (x, y - 6), (x, y - 7),
 			(x, y - 8), (x, y - 9)]
 
+	def get_pos_list(self):
+		x, y = self.position
+		return [
+			(x + 1, y), (x + 2, y), (x + 3, y), (x + 4, y), (x + 5, y), (x + 6, y), (x + 7, y), (x + 8, y),
+			(x - 1, y), (x - 2, y), (x - 3, y), (x - 4, y), (x - 5, y), (x - 6, y), (x - 7, y), (x - 8, y),
+			(x, y + 1), (x, y + 2), (x, y + 3), (x, y + 4), (x, y + 5), (x, y + 6), (x, y + 7), (x, y + 8),
+			(x, y + 9), (x, y - 1), (x, y - 2), (x, y - 3), (x, y - 4), (x, y - 5), (x, y - 6), (x, y - 7),
+			(x, y - 8), (x, y - 9)]
+
 	def picture(self):
 		if self.red:
 			return 'red_cannon.gif'
@@ -334,6 +373,10 @@ class Shi(Chess):
 		self.name = '士'
 		x, y = self.position
 		self.pos_list = [(x + 1, y + 1), (x - 1, y + 1), (x - 1, y - 1), (x + 1, y - 1)]
+
+	def get_pos_list(self):
+		x, y = self.position
+		return [(x + 1, y + 1), (x - 1, y + 1), (x - 1, y - 1), (x + 1, y - 1)]
 
 	def picture(self):
 		if self.red:
@@ -367,6 +410,10 @@ class Shuai(Chess):
 		self.name = '帅'
 		x, y = self.position
 		self.pos_list = [(x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)]
+
+	def get_pos_list(self):
+		x, y = self.position
+		return [(x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)]
 
 	def picture(self):
 		if self.red:
@@ -411,6 +458,10 @@ class Xiang(Chess):
 		self.name = '象'
 		x, y = self.position
 		self.pos_list = [(x + 2, y + 2), (x - 2, y + 2), (x - 2, y - 2), (x + 2, y - 2)]
+
+	def get_pos_list(self):
+		x, y = self.position
+		return [(x + 2, y + 2), (x - 2, y + 2), (x - 2, y - 2), (x + 2, y - 2)]
 
 	def picture(self):
 		if self.red:
