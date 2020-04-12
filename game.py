@@ -159,7 +159,6 @@ class Game:
 
 	def move(self, move):
 		(x, y), (x_to, y_to) = move
-		print(self.chessboard[x, y], move)
 		self.chessboard[x, y].set_position((x_to, y_to))
 		self.chessboard[x_to, y_to] = self.chessboard[x, y]
 		self.chessboard[x, y] = None
