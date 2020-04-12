@@ -50,6 +50,8 @@ class Display:
 	def __init__(self, is_muted=False):
 		self.screen = pygame.display.set_mode((720, 800))  	# 设置屏幕大小为（720，800），方便对应棋子位置
 		self.pieces = None
+		self.board = pygame.sprite.Group()  				# 棋盘
+		self.board.add((Background()))
 		pygame.mixer.init()
 		if not is_muted:
 			pygame.mixer.music.load(os.path.join(data_dir, 'easy_mode.wav'))
@@ -61,12 +63,14 @@ class Display:
 		return x // 80, y // 80
 
 	def get_pos(self):
-		for event in pygame.event.get():
-			if event.type == pygame.MOUSEBUTTONDOWN:    			# 点击某处
-				pos = self.convert_pos(pygame.mouse.get_pos())		# 将点击位置转化为棋盘上坐标
-				return pos
-			elif event.type == pygame.QUIT:							# 退出游戏
-				quit()
+		while True:
+			for event in pygame.event.get():
+				if event.type == pygame.MOUSEBUTTONDOWN:    			# 点击某处
+					pos = self.convert_pos(pygame.mouse.get_pos())		# 将点击位置转化为棋盘上坐标
+					if pos:
+						return pos
+				elif event.type == pygame.QUIT:							# 退出游戏
+					quit()
 
 	def begin(self):
 		start_page = pygame.sprite.Group()
@@ -85,24 +89,22 @@ class Display:
 				return 'pvc'
 
 	def init(self, game):
-		board = pygame.sprite.Group()  			# 棋盘
-		board.add((Background()))
 		self.pieces = pygame.sprite.Group()  	# 所有棋子
 		for piece in game.chessboard.values():  # 找到所有棋子
 			if piece:
 				self.pieces.add((AddChess(piece.picture(), piece.position)))
-		board.draw(self.screen)  			# 显示棋盘背景
-		self.pieces.draw(self.screen)  		# 显示所有棋子
+		self.board.draw(self.screen)  			# 显示棋盘背景
+		self.pieces.draw(self.screen)  			# 显示所有棋子
 		pygame.display.flip()
 
 	def get_move(self, game):
-		start = (-1, -1)  # 棋子出发位置
+		start = (-1, -1)  						# 棋子出发位置
 		while True:
-			end = self.get_pos()			# 将点击位置转化为棋盘上坐标
-			if game.can_move(start, end):  	# 棋子从出发位置到鼠标点击位置移动合法
-				return start, end 			# 出发位置赋值为空
-			else:  							# 出发位置未赋值或者结束位置不合法
-				start = end  				# 将出发位置设置为鼠标点击位置
+			end = self.get_pos()				# 将点击位置转化为棋盘上坐标
+			if game.can_move((start, end)):		# 棋子从出发位置到鼠标点击位置移动合法
+				return start, end 				# 出发位置赋值为空
+			else:  								# 出发位置未赋值或者结束位置不合法
+				start = end  					# 将出发位置设置为鼠标点击位置
 
 	def move(self, move):
 		start, end = move
@@ -111,6 +113,7 @@ class Display:
 				piece.kill()
 			if piece.position == start:  	# 棋子从出发位置移动
 				piece.move(end)
+		self.board.draw(self.screen)  		# 显示棋盘背景
 		self.pieces.draw(self.screen)
 		pygame.display.flip()
 
