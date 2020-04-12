@@ -183,7 +183,7 @@ class Display:
 		check.add(Check(red))
 		check.draw(self.screen)
 		pygame.display.flip()
-		sleep(0.2)
+		sleep(0.4)
 		self.board.draw(self.screen)  # 显示棋盘背景
 		self.pieces.draw(self.screen)
 		pygame.display.flip()
