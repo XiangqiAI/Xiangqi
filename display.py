@@ -52,6 +52,9 @@ class Display:
 		self.pieces = None
 		self.board = pygame.sprite.Group()  				# 棋盘
 		self.board.add((Background()))
+		pygame.display.set_caption('中国象棋')
+		icon = pygame.image.load(os.path.join(data_dir, 'icon.jpg'))
+		pygame.display.set_icon(icon)
 		pygame.mixer.init()
 		if not is_muted:
 			pygame.mixer.music.load(os.path.join(data_dir, 'easy_mode.wav'))
