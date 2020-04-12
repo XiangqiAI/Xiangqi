@@ -61,6 +61,7 @@ def pvn(is_muted):										# 进行游戏
 				break
 			elif game.check():
 				print('将军')
+				display.check(game.red_move)
 
 
 def run(is_muted, train=False, graphics=False):
