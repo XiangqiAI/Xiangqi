@@ -100,7 +100,7 @@ class Game:
 		chessboard = deepcopy(self.chessboard)
 
 		(x, y), (x_to, y_to) = move
-		chessboard[x, y].position = (x_to, y_to)
+		chessboard[x, y].set_position((x_to, y_to))
 		chessboard[x_to, y_to] = chessboard[x, y]
 		chessboard[x, y] = None
 
@@ -159,7 +159,8 @@ class Game:
 
 	def move(self, move):
 		(x, y), (x_to, y_to) = move
-		self.chessboard[x, y].position = (x_to, y_to)
+		print(self.chessboard[x, y], move)
+		self.chessboard[x, y].set_position((x_to, y_to))
 		self.chessboard[x_to, y_to] = self.chessboard[x, y]
 		self.chessboard[x, y] = None
 		self.red_move = not self.red_move
@@ -176,11 +177,12 @@ class Game:
 				pieces.append(i)
 		for piece in pieces:										# 找到目前能做的所有事
 			for pos in piece.possible_moves(self.chessboard):
+				chess = deepcopy(piece)
 				chessboard = deepcopy(self.chessboard)
-				x, y = piece.position
+				x, y = chess.position
 				x_to, y_to = pos
-				piece.set_position(pos)
-				chessboard[x_to, y_to] = piece
+				chess.set_position(pos)
+				chessboard[x_to, y_to] = chess
 				chessboard[x, y] = None
 				if not self.check():								# 依次检查能否摆脱将军
 					return False

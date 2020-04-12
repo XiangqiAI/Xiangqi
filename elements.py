@@ -14,7 +14,7 @@ class Chess:
 			color = 'R'
 		else:
 			color = 'B'
-		return '{} {} at {}'.format(color, self.name, self.position)
+		return '{}{} at {}'.format(color, self.name, self.position)
 
 	@abstractmethod
 	def picture(self):
