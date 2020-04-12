@@ -1,53 +1,57 @@
 # -*- coding: utf-8 -*-
 from elements import *
+from copy import deepcopy
 
 
 class Game:
 	"""
-	chessboard是一个棋盘，本质是一个字典。
-	键为一个表示位置的元组，值为空或者一个棋子对象。
+	chessboard是一个棋盘，本质是一个字典
+	键为一个表示位置的元组，值为空或者一个棋子对象
 	在调用的时候可以通过chessboard[x, y]来调用位于(x, y)的棋子
 
 	坐标原点在左上角，x轴向右，y轴向下
 	"""
-	def __init__(self):
+	def __init__(self, chessboard=None):
 		self.red_move = True		# 当前是否红方回合
-		self.chessboard = dict()
-		for i in range(9):
-			for j in range(10):
-				self.chessboard[i, j] = None
-		self.chessboard[0, 6] = Bing((0, 6))
-		self.chessboard[2, 6] = Bing((2, 6))
-		self.chessboard[4, 6] = Bing((4, 6))
-		self.chessboard[6, 6] = Bing((6, 6))
-		self.chessboard[8, 6] = Bing((8, 6))
-		self.chessboard[1, 7] = Pao((1, 7))
-		self.chessboard[7, 7] = Pao((7, 7))
-		self.chessboard[0, 9] = Che((0, 9))
-		self.chessboard[8, 9] = Che((8, 9))
-		self.chessboard[1, 9] = Ma((1, 9))
-		self.chessboard[7, 9] = Ma((7, 9))
-		self.chessboard[2, 9] = Xiang((2, 9))
-		self.chessboard[6, 9] = Xiang((6, 9))
-		self.chessboard[3, 9] = Shi((3, 9))
-		self.chessboard[5, 9] = Shi((5, 9))
-		self.chessboard[4, 9] = Shuai((4, 9))
-		self.chessboard[0, 3] = Bing((0, 3), red=False)
-		self.chessboard[2, 3] = Bing((2, 3), red=False)
-		self.chessboard[4, 3] = Bing((4, 3), red=False)
-		self.chessboard[6, 3] = Bing((6, 3), red=False)
-		self.chessboard[8, 3] = Bing((8, 3), red=False)
-		self.chessboard[1, 2] = Pao((1, 2), red=False)
-		self.chessboard[7, 2] = Pao((7, 2), red=False)
-		self.chessboard[0, 0] = Che((0, 0), red=False)
-		self.chessboard[8, 0] = Che((8, 0), red=False)
-		self.chessboard[1, 0] = Ma((1, 0), red=False)
-		self.chessboard[7, 0] = Ma((7, 0), red=False)
-		self.chessboard[2, 0] = Xiang((2, 0), red=False)
-		self.chessboard[6, 0] = Xiang((6, 0), red=False)
-		self.chessboard[3, 0] = Shi((3, 0), red=False)
-		self.chessboard[5, 0] = Shi((5, 0), red=False)
-		self.chessboard[4, 0] = Shuai((4, 0), red=False)
+		if chessboard:
+			self.chessboard = chessboard
+		else:
+			self.chessboard = dict()
+			for i in range(9):
+				for j in range(10):
+					self.chessboard[i, j] = None
+			self.chessboard[0, 6] = Bing((0, 6))
+			self.chessboard[2, 6] = Bing((2, 6))
+			self.chessboard[4, 6] = Bing((4, 6))
+			self.chessboard[6, 6] = Bing((6, 6))
+			self.chessboard[8, 6] = Bing((8, 6))
+			self.chessboard[1, 7] = Pao((1, 7))
+			self.chessboard[7, 7] = Pao((7, 7))
+			self.chessboard[0, 9] = Che((0, 9))
+			self.chessboard[8, 9] = Che((8, 9))
+			self.chessboard[1, 9] = Ma((1, 9))
+			self.chessboard[7, 9] = Ma((7, 9))
+			self.chessboard[2, 9] = Xiang((2, 9))
+			self.chessboard[6, 9] = Xiang((6, 9))
+			self.chessboard[3, 9] = Shi((3, 9))
+			self.chessboard[5, 9] = Shi((5, 9))
+			self.chessboard[4, 9] = Shuai((4, 9))
+			self.chessboard[0, 3] = Bing((0, 3), red=False)
+			self.chessboard[2, 3] = Bing((2, 3), red=False)
+			self.chessboard[4, 3] = Bing((4, 3), red=False)
+			self.chessboard[6, 3] = Bing((6, 3), red=False)
+			self.chessboard[8, 3] = Bing((8, 3), red=False)
+			self.chessboard[1, 2] = Pao((1, 2), red=False)
+			self.chessboard[7, 2] = Pao((7, 2), red=False)
+			self.chessboard[0, 0] = Che((0, 0), red=False)
+			self.chessboard[8, 0] = Che((8, 0), red=False)
+			self.chessboard[1, 0] = Ma((1, 0), red=False)
+			self.chessboard[7, 0] = Ma((7, 0), red=False)
+			self.chessboard[2, 0] = Xiang((2, 0), red=False)
+			self.chessboard[6, 0] = Xiang((6, 0), red=False)
+			self.chessboard[3, 0] = Shi((3, 0), red=False)
+			self.chessboard[5, 0] = Shi((5, 0), red=False)
+			self.chessboard[4, 0] = Shuai((4, 0), red=False)
 
 	@staticmethod
 	def check_pos(position):
@@ -62,8 +66,39 @@ class Game:
 			return False
 		return True
 
-	def find_pieces(self):												# Todo: 找到当前所有棋子
-		pass
+	def get_legal_moves(self):
+		"""
+		Returns all possible moves.
+
+		:return: ((x, y), (x_to, y_to))
+		"""
+		moves = []
+		pieces = [piece for piece in self.chessboard.values() if piece]
+		for piece in pieces:
+			for pos in piece.possible_move(self.chessboard):
+				move = (piece.position, pos)
+				moves.append(move)
+		return moves
+
+	def generate_successor(self, move):
+		"""
+		Returns the successor chessboard after the move.
+
+		:param move:
+		:return:
+		"""
+		# copy current chessboard
+		chessboard = deepcopy(self.chessboard)
+
+		start, end = move
+		x, y = start
+		x_to, y_to = end
+		chessboard[x, y].position = (x_to, y_to)
+		chessboard[x_to, y_to] = chessboard[x, y]
+		chessboard[x, y] = None
+
+		game = Game(chessboard)
+		return game
 
 	def check(self):
 		"""
