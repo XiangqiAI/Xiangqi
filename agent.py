@@ -10,4 +10,4 @@ class AI:
 			if game.can_move(move):
 				moves.append(move)
 		choice = random.choice(range(len(moves)))
-		return choice
+		return moves[choice]

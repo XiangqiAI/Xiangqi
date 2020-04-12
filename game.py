@@ -82,7 +82,7 @@ class Game:
 		:return: ((x, y), (x_to, y_to))
 		"""
 		moves = []
-		pieces = [piece for piece in self.chessboard.values() if piece]
+		pieces = [piece for piece in self.chessboard.values() if piece and piece.red == self.red_move]
 		for piece in pieces:
 			for pos in piece.possible_moves(self.chessboard):
 				move = (piece.position, pos)
@@ -146,7 +146,7 @@ class Game:
 		if self.red_move != chessboard[x, y].red:										# 走棋颜色错误
 			print('Not your turn')
 			return False
-		if not chessboard[x, y].is_legal_move(end, chessboard):				# 该棋子不能动
+		if not chessboard[x, y].is_legal_move(end, chessboard):							# 该棋子不能动
 			print('Illegal move')
 			return False
 		chessboard[x, y].set_position(end)
