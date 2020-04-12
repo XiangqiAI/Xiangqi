@@ -130,7 +130,7 @@ class Display:												# Todo: 实现摸子走子
 			for piece in game.chessboard.values():
 				if piece:
 					if piece.red == game.red_move:
-						possible_moves += [(piece.position, piece.possible_move(game.chessboard))]
+						possible_moves += [(piece.position, piece.possible_moves(game.chessboard))]
 			choice = random.choice(range(len(possible_moves)))
 			start, nxt = possible_moves[choice]
 			choice = random.choice(range(len(nxt)))
@@ -177,8 +177,8 @@ class Display:												# Todo: 实现摸子走子
 						start = (-1, -1)
 						possible_moves = []
 						for piece in game.chessboard.values():
-							if piece and piece.red == game.red_move and len(piece.possible_move(game.chessboard)):
-								possible_moves += [(piece.position, piece.possible_move(game.chessboard))]
+							if piece and piece.red == game.red_move and len(piece.possible_moves(game.chessboard)):
+								possible_moves += [(piece.position, piece.possible_moves(game.chessboard))]
 						while not game.move(start, end):
 							choice = random.choice(range(len(possible_moves)))
 							start, nxt = possible_moves[choice]

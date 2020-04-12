@@ -132,7 +132,7 @@ class Chess:
 				num += 1
 		return num
 
-	def possible_move(self, chessboard):
+	def possible_moves(self, chessboard):
 		"""
 		寻找所有可能移动到的合法位置
 

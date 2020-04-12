@@ -75,7 +75,7 @@ class Game:
 		moves = []
 		pieces = [piece for piece in self.chessboard.values() if piece]
 		for piece in pieces:
-			for pos in piece.possible_move(self.chessboard):
+			for pos in piece.possible_moves(self.chessboard):
 				move = (piece.position, pos)
 				moves.append(move)
 		return moves
@@ -165,7 +165,7 @@ class Game:
 			if i and i.red == self.red_move:
 				pieces.append(i)
 		for piece in pieces:										# 找到目前能做的所有事
-			for move in piece.possible_move(self.chessboard):
+			for move in piece.possible_moves(self.chessboard):
 				x, y = piece.position
 				x_to, y_to = move
 				temp = self.chessboard[x_to, y_to]
