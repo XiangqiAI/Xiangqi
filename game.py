@@ -9,6 +9,10 @@ class Game:
 	键为一个表示位置的元组，值为空或者一个棋子对象
 	在调用的时候可以通过chessboard[x, y]来调用位于(x, y)的棋子
 
+	另外需注意python的拷贝问题，很多时候python只是传引用
+	详见：https://www.cnblogs.com/wilber2013/p/4645353.html
+	略见：https://www.runoob.com/w3cnote/python-understanding-dict-copy-shallow-or-deep.html
+
 	坐标原点在左上角，x轴向右，y轴向下
 	"""
 	def __init__(self, chessboard=None):
@@ -53,6 +57,11 @@ class Game:
 			self.chessboard[5, 0] = Shi((5, 0), red=False)
 			self.chessboard[4, 0] = Shuai((4, 0), red=False)
 
+	def copy(self):
+		chessboard = deepcopy(self.chessboard)
+		game = Game(chessboard)
+		return game
+
 	@staticmethod
 	def check_pos(position):
 		"""
@@ -90,9 +99,7 @@ class Game:
 		# copy current chessboard
 		chessboard = deepcopy(self.chessboard)
 
-		start, end = move
-		x, y = start
-		x_to, y_to = end
+		(x, y), (x_to, y_to) = move
 		chessboard[x, y].position = (x_to, y_to)
 		chessboard[x_to, y_to] = chessboard[x, y]
 		chessboard[x, y] = None
@@ -120,39 +127,42 @@ class Game:
 				return True
 		return False
 
-	def move(self, start_position, end_position):
+	def can_move(self, move):
 		"""
-		移动棋子
-		移动成功返回True，否则返回False
+		是否能移动棋子
+		可以返回True，否则返回False
 
-		:param start_position:
-		:param end_position:
+		:param move:
 		:return:
 		"""
-		x, y = start_position
-		if not self.check_pos(start_position) or not self.check_pos(end_position):		# 位置越界
+		start, end = move
+		x, y = start
+		x_to, y_to = end
+		chessboard = deepcopy(self.chessboard)
+		if not self.check_pos(start) or not self.check_pos(end):		# 位置越界
 			return False
-		if not self.chessboard[x, y]:													# 出发的位置不存在棋子
+		if not chessboard[x, y]:														# 出发的位置不存在棋子
 			return False
-		if self.red_move != self.chessboard[x, y].red:									# 走棋颜色错误
+		if self.red_move != chessboard[x, y].red:										# 走棋颜色错误
 			print('Not your turn')
 			return False
-		if not self.chessboard[x, y].is_legal_move(end_position, self.chessboard):		# 该棋子不能动
+		if not chessboard[x, y].is_legal_move(end, chessboard):				# 该棋子不能动
 			print('Illegal move')
 			return False
-		x_to, y_to = end_position
-		temp = self.chessboard[x_to, y_to]
-		self.chessboard[x, y].set_position(end_position)
-		self.chessboard[x_to, y_to] = self.chessboard[x, y]
-		self.chessboard[x, y] = None
+		chessboard[x, y].set_position(end)
+		chessboard[x_to, y_to] = chessboard[x, y]
+		chessboard[x, y] = None
 		if self.check():																# 检查是否送将，若是则取消移动
-			self.chessboard[x_to, y_to].set_position(start_position)
-			self.chessboard[x, y] = self.chessboard[x_to, y_to]
-			self.chessboard[x_to, y_to] = temp
 			print('不能送将')															# Todo: 把不能送将显示出来
 			return False
-		self.red_move = not self.red_move
 		return True
+
+	def move(self, move):
+		(x, y), (x_to, y_to) = move
+		self.chessboard[x, y].position = (x_to, y_to)
+		self.chessboard[x_to, y_to] = self.chessboard[x, y]
+		self.chessboard[x, y] = None
+		self.red_move = not self.red_move
 
 	def checkmate(self):
 		"""
@@ -165,20 +175,13 @@ class Game:
 			if i and i.red == self.red_move:
 				pieces.append(i)
 		for piece in pieces:										# 找到目前能做的所有事
-			for move in piece.possible_moves(self.chessboard):
+			for pos in piece.possible_moves(self.chessboard):
+				chessboard = deepcopy(self.chessboard)
 				x, y = piece.position
-				x_to, y_to = move
-				temp = self.chessboard[x_to, y_to]
-				piece.set_position(move)
-				self.chessboard[x_to, y_to] = piece
-				self.chessboard[x, y] = None
+				x_to, y_to = pos
+				piece.set_position(pos)
+				chessboard[x_to, y_to] = piece
+				chessboard[x, y] = None
 				if not self.check():								# 依次检查能否摆脱将军
-					piece.set_position((x, y))
-					self.chessboard[x, y] = piece
-					self.chessboard[x_to, y_to] = temp
 					return False
-				else:
-					piece.set_position((x, y))
-					self.chessboard[x, y] = piece
-					self.chessboard[x_to, y_to] = temp
 		return True
