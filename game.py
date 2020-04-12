@@ -152,7 +152,8 @@ class Game:
 		chessboard[x, y].set_position(end)
 		chessboard[x_to, y_to] = chessboard[x, y]
 		chessboard[x, y] = None
-		if self.check():												# 检查是否送将
+		game = Game(chessboard, self.red_move)
+		if game.check():												# 检查是否送将
 			print('不能送将')												# Todo: 把不能送将显示出来
 			return False
 		return True
