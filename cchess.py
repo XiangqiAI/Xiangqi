@@ -36,9 +36,9 @@ def get_move(agent, game, layout=None):					# 获取下一步落子
 
 
 def pvn(is_muted):										# 进行游戏
-	game = Game()
-	display = Display(is_muted)
 	while True:
+		game = Game()
+		display = Display(is_muted)
 		agents = []
 		index = 0
 		mode = display.begin()							# 获取游戏模式（双人/人机）
