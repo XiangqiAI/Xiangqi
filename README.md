@@ -2,15 +2,17 @@
 
 ## 运行
 
-- python cchess.py
+进行游戏
 
-- python cchess.py -m
+`python cchess.py`
 
-  静音进行游戏
+静音进行游戏
+
+`python cchess.py -m`
 
 ## 依赖
 
-pip install pygame
+`pip install pygame`
 
 ## 文件结构
 
