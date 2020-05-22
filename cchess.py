@@ -64,7 +64,7 @@ def pvn(is_muted):										# 进行游戏
 				display.check(game.red_move)
 
 
-def run(is_muted, train=False, graphics=False):
+def run(is_muted, train=False):
 	if train:
 		pass
 	else:

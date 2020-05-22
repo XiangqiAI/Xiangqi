@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from abc import abstractmethod
-import traceback
 
 
 class Chess:
-	def __init__(self, position, red=True, selected=False):
+	def __init__(self, position, red=True):
 		self.position = position
 		self.red = red
 		self.name = ''
@@ -165,8 +164,8 @@ class Chess:
 
 
 class Bing(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '兵'
 		x, y = self.position
 		self.pos_list = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
@@ -211,8 +210,8 @@ class Bing(Chess):
 
 
 class Che(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '车'
 		x, y = self.position
 		self.pos_list = [
@@ -261,8 +260,8 @@ class Che(Chess):
 
 
 class Ma(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '马'
 		x, y = self.position
 		self.pos_list = [
@@ -322,8 +321,8 @@ class Ma(Chess):
 
 
 class Pao(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '炮'
 		x, y = self.position
 		self.pos_list = [
@@ -368,8 +367,8 @@ class Pao(Chess):
 
 
 class Shi(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '士'
 		x, y = self.position
 		self.pos_list = [(x + 1, y + 1), (x - 1, y + 1), (x - 1, y - 1), (x + 1, y - 1)]
@@ -405,8 +404,8 @@ class Shi(Chess):
 
 
 class Shuai(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '帅'
 		x, y = self.position
 		self.pos_list = [(x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)]
@@ -453,8 +452,8 @@ class Shuai(Chess):
 
 
 class Xiang(Chess):
-	def __init__(self, position, red=True, selected=False):
-		super().__init__(position, red, selected)
+	def __init__(self, position, red=True):
+		super().__init__(position, red)
 		self.name = '象'
 		x, y = self.position
 		self.pos_list = [(x + 2, y + 2), (x - 2, y + 2), (x - 2, y - 2), (x + 2, y - 2)]
