@@ -122,6 +122,8 @@ class Game:
 				if piece.red != self.red_move:								# 找到对方可以将军的棋子
 					if piece.name == '炮' or piece.name == '马' or piece.name == '车' or piece.name == '兵':
 						dangers.append(piece)
+		if not king:
+			return True
 		for danger in dangers:												# 对每个棋子检查能否将军
 			if danger.is_legal_move(king.position, self.chessboard):
 				return True
