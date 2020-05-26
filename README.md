@@ -12,7 +12,11 @@
 
 ## 依赖
 
-`pip install pygame`
+pygame
+
+numpy
+
+pytorch
 
 ## 文件结构
 
