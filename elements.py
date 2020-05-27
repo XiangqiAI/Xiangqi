@@ -440,6 +440,8 @@ class Shuai(Chess):
 						if chessboard[x, y_pos]:
 							break
 					else:
+						if y_enemy == y:
+							return True
 						print('白脸将')
 						return False
 				break

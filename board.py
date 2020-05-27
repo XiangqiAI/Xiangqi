@@ -153,7 +153,8 @@ class GameState:
 		for piece in pieces:
 			for pos in piece.possible_moves(self.chessboard):
 				move = (piece.position, pos)
-				moves.append(move)
+				if self.can_move(move):
+					moves.append(move)
 		return moves
 
 	def generate_successor(self, move):
@@ -181,7 +182,7 @@ class GameState:
 				if piece.name == 'shuai' and piece.red == self.red_move:		# 找到己方帅
 					king = piece
 				if piece.red != self.red_move:								# 找到对方可以将军的棋子
-					if piece.name == 'pao' or piece.name == 'ma' or piece.name == 'che' or piece.name == 'bing':
+					if piece.name in ['pao', 'ma', 'che', 'bing', 'shuai']:
 						dangers.append(piece)
 		if not king:
 			return True
