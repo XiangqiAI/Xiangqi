@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from display import Display
-from game import Game
+from board import GameState
 from agent import AI
 import sys
 import random
@@ -37,7 +37,7 @@ def get_move(agent, game, layout=None):					# 获取下一步落子
 
 def pvn(is_muted):										# 进行游戏
 	while True:
-		game = Game()
+		game = GameState()
 		display = Display(is_muted)
 		agents = []
 		index = 0
