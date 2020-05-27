@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
-from game import Game
+from board import GameState
 
 
 class Search:
 	def __init__(self):
 		self.discount = 0.1
 		self.value = {
-			'兵': 100,
-			'炮': 450,
-			'车': 900,
-			'马': 400,
-			'象': 200,
-			'士': 200,
-			'帅': 100000
+			'bing': 100,
+			'pao': 450,
+			'che': 900,
+			'ma': 400,
+			'xiang': 200,
+			'shi': 200,
+			'shuai': 100000
 		}
 		self.depth = 1
 
-	def evaluation(self, game: Game):
+	def evaluation(self, game: GameState):
 		score = 0
 		if game.checkmate():
 			return -1000000
