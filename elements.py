@@ -166,7 +166,7 @@ class Chess:
 class Bing(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '兵'
+		self.name = 'bing'
 		x, y = self.position
 		self.pos_list = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
 
@@ -212,7 +212,7 @@ class Bing(Chess):
 class Che(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '车'
+		self.name = 'che'
 		x, y = self.position
 		self.pos_list = [
 			(x + 1, y), (x + 2, y), (x + 3, y), (x + 4, y), (x + 5, y), (x + 6, y), (x + 7, y), (x + 8, y),
@@ -262,7 +262,7 @@ class Che(Chess):
 class Ma(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '马'
+		self.name = 'ma'
 		x, y = self.position
 		self.pos_list = [
 			(x + 1, y + 2), (x + 2, y + 1), (x - 1, y + 2), (x - 2, y + 1),
@@ -323,7 +323,7 @@ class Ma(Chess):
 class Pao(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '炮'
+		self.name = 'pao'
 		x, y = self.position
 		self.pos_list = [
 			(x + 1, y), (x + 2, y), (x + 3, y), (x + 4, y), (x + 5, y), (x + 6, y), (x + 7, y), (x + 8, y),
@@ -369,7 +369,7 @@ class Pao(Chess):
 class Shi(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '士'
+		self.name = 'shi'
 		x, y = self.position
 		self.pos_list = [(x + 1, y + 1), (x - 1, y + 1), (x - 1, y - 1), (x + 1, y - 1)]
 
@@ -406,7 +406,7 @@ class Shi(Chess):
 class Shuai(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '帅'
+		self.name = 'shuai'
 		x, y = self.position
 		self.pos_list = [(x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)]
 
@@ -433,7 +433,7 @@ class Shuai(Chess):
 		x, y = end_position
 		dx, dy = self.d_position(end_position)
 		for i in chessboard.values():  # 判断是否有白脸将
-			if i and i.name == '帅' and (i.red != self.red):
+			if i and i.name == 'shuai' and (i.red != self.red):
 				x_enemy, y_enemy = i.position
 				if x_enemy == x:
 					for y_pos in range(min(y_enemy, y) + 1, max(y_enemy, y)):
@@ -454,7 +454,7 @@ class Shuai(Chess):
 class Xiang(Chess):
 	def __init__(self, position, red=True):
 		super().__init__(position, red)
-		self.name = '象'
+		self.name = 'xiang'
 		x, y = self.position
 		self.pos_list = [(x + 2, y + 2), (x - 2, y + 2), (x - 2, y - 2), (x + 2, y - 2)]
 

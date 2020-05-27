@@ -117,10 +117,10 @@ class Game:
 		king = None			# 己方帅
 		for piece in self.chessboard.values():
 			if piece:
-				if piece.name == '帅' and piece.red == self.red_move:		# 找到己方帅
+				if piece.name == 'shuai' and piece.red == self.red_move:		# 找到己方帅
 					king = piece
 				if piece.red != self.red_move:								# 找到对方可以将军的棋子
-					if piece.name == '炮' or piece.name == '马' or piece.name == '车' or piece.name == '兵':
+					if piece.name == 'pao' or piece.name == 'ma' or piece.name == 'che' or piece.name == 'bing':
 						dangers.append(piece)
 		if not king:
 			return True
