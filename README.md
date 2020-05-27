@@ -31,3 +31,5 @@ display: 图形化界面
 elements.py: 棋子行为
 
 game.py: 游戏基本规则
+
+search.py: 实现了minimax算法
