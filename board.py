@@ -223,13 +223,17 @@ class GameState:
 		return True
 
 	def move(self, move):
+		flag = False
 		self.last_moves.pop(0)
 		self.last_moves.append(move)
 		(x, y), (x_to, y_to) = move
+		if self.chessboard[x_to, y_to]:
+			flag = True
 		self.chessboard[x, y].set_position((x_to, y_to))
 		self.chessboard[x_to, y_to] = self.chessboard[x, y]
 		self.chessboard[x, y] = None
 		self.red_move = not self.red_move
+		return flag
 
 	def checkmate(self):
 		"""
