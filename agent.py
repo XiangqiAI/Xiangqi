@@ -10,7 +10,7 @@ class AI:
 		self.train = train
 		self.mcts = MCTS(c_put, n_playout)
 
-	def get_move(self, game_state, mode=0, temperature=1e-3, return_probs=False):										# 随机选择
+	def get_move(self, game_state, mode=0, temperature=1e-3, return_probs=False):
 		if mode == 2:
 			moves = []
 			for move in game_state.get_legal_moves():

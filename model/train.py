@@ -24,7 +24,6 @@ class Train(object):
 		states = []
 		probs = []
 		players = []
-		wrs = None
 		turn_num = 0
 		while True:
 			move, moves_probs = self.ai.get_move(game_state, return_probs=True)
@@ -47,6 +46,7 @@ class Train(object):
 	def collect_data(self, n=1):
 		for i in range(n):
 			data = self.self_play()
+			data = list(data)[:]
 			self.game_len = len(data)
 			self.data_buffer.extend(data)
 

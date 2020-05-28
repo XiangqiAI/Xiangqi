@@ -83,4 +83,3 @@ class Net(nn.Module):
 
 	def save(self, filename='Model'):
 		torch.save(self.state_dict(), filename)
-
