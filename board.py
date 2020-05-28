@@ -118,7 +118,10 @@ class GameState:
 			if piece:
 				x, y = piece.position
 				index = self.index_map[piece.name]
-				state[index, x, y] = 1 if piece.red else state[index + 7, x, y] = 1
+				if piece.red:
+					state[index, x, y] = 1
+				else:
+					state[index + 7, x, y] = 1
 		if self.red_move:
 			state[14, :, :] = 1
 		for i in range(5):
