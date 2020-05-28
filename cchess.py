@@ -2,6 +2,7 @@
 from display import Display
 from board import GameState
 from agent import AI
+from .model.train import Train
 import sys
 import random
 
@@ -17,27 +18,31 @@ def read_command(argv):									# 读取命令行参数
 	usage_str = """
 	python cchess.py -m
 	- starts a muted game
+	python cchess.py -t
+	- train the model
 	"""
 	parser = OptionParser(usage_str)
 	parser.add_option('-m', '--mute', action='store_true', dest='isMuted', help='mute the game', default=False)
+	parser.add_option('-t', '--train', action='store_true', dest='isTrainMode', help='train mode', default=False)
 	options, junk = parser.parse_args(argv)
 	if len(junk):
 		raise Exception('Options not expected' + str(junk))
 	args = dict()
 	args['is_muted'] = options.isMuted
+	args['is_train_mode'] = options.isTrainMode
 	return args
 
 
-def get_move(agent, game, layout=None):					# 获取下一步落子
+def get_move(agent, game, layout: Display = None):					# 获取下一步落子
 	if agent == 'player':
-		return layout.get_move(game=game)
+		return layout.get_move(game_state=game)
 	else:
-		return AI.get_move(game=game)
+		return AI.get_move(game_state=game)
 
 
 def pvn(is_muted):										# 进行游戏
 	while True:
-		game = GameState()
+		game_state = GameState()
 		display = Display(is_muted)
 		agents = []
 		index = 0
@@ -47,26 +52,27 @@ def pvn(is_muted):										# 进行游戏
 		elif mode == 'pvc':
 			agents = ('player', 'AI')
 			index = random.randint(0, 1)
-		display.init(game)
+		display.init(game_state)
 		while True:										# 双方依次进行
-			move = get_move(agents[index], game=game, layout=display)
-			game.move(move)
+			move = get_move(agents[index], game=game_state, layout=display)
+			game_state.move(move)
 			display.move(move)
 			index = 1 - index							# index是目前回合一方
-			if game.checkmate():
-				if game.red_move:
+			if game_state.checkmate():
+				if game_state.red_move:
 					print('黑方胜')
 				else:
 					print('红方胜')
 				break
-			elif game.check():
+			elif game_state.check():
 				print('将军')
-				display.check(game.red_move)
+				display.check(game_state.red_move)
 
 
-def run(is_muted, train=False):
-	if train:
-		pass
+def run(is_muted, is_train_mode):
+	if is_train_mode:
+		instance = Train()
+		instance.run()
 	else:
 		pvn(is_muted)
 
