@@ -2,7 +2,7 @@
 from display import Display
 from board import GameState
 from agent import AI
-from .model.train import Train
+from model.train import Train
 import sys
 import random
 
