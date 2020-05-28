@@ -112,6 +112,7 @@ class GameState:
 		chessboard = deepcopy(self.chessboard)
 		last_moves = deepcopy(self.last_moves)
 		game = GameState(chessboard, self.red_move, last_moves)
+		game.turns_no_progress = self.turns_no_progress
 		return game
 
 	def state(self):
