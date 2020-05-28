@@ -142,17 +142,17 @@ class Display:
 		self.pieces.draw(self.screen)  			# 显示所有棋子
 		pygame.display.flip()
 
-	def get_move(self, game):
+	def get_move(self, game_state):
 		"""
 		获取玩家操作
-		:param game:
+		:param game_state:
 		:return:
 		"""
 		check_box = pygame.sprite.Group()
 		start = (-1, -1)  						# 棋子出发位置
 		while True:
 			end = self.get_pos()				# 将点击位置转化为棋盘上坐标
-			if game.can_move((start, end)):		# 棋子从出发位置到鼠标点击位置移动合法
+			if game_state.can_move((start, end)):		# 棋子从出发位置到鼠标点击位置移动合法
 				check_box.empty()
 				return start, end 				# 出发位置赋值为空
 			else:  								# 出发位置未赋值或者结束位置不合法
