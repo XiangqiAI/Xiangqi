@@ -24,24 +24,18 @@ class Train(object):
 		states = []
 		probs = []
 		players = []
-		turn_num = 0
 		while True:
 			move, moves_probs = self.ai.get_move(game_state, return_probs=True)
 			states.append(game_state.state())
 			probs.append(moves_probs)
 			players.append(game_state.red_move)
-			if game_state.move(move):
-				turn_num = 0
-			else:
-				turn_num += 1
-			if game_state.checkmate():
+			if game_state.is_end():
 				wrs = np.zeros(len(players))
-				wrs[np.array(players) == game_state.red_move] = -1.0
-				wrs[np.array(players) != game_state.red_move] = 1.0
+				if game_state.winner:
+					wrs[np.array(players) == game_state.red_move] = -1.0
+					wrs[np.array(players) != game_state.red_move] = 1.0
 				return zip(states, probs, wrs)
-			elif turn_num == 50:
-				wrs = np.zeros(len(players))
-				return zip(states, probs, wrs)
+
 
 	def collect_data(self, n=1):
 		for i in range(n):

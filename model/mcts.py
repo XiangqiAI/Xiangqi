@@ -63,10 +63,13 @@ class MCTS(object):
 			move, node = node.select(self.c_puct)
 			game_state.move(move)
 		probs, wr = self.evaluation_fn(game_state)
-		if not game_state.checkmate():
-			node.expand(game_state, probs)
+		if game_state.is_end():
+			if game_state.winner == 0:
+				wr = 0
+			else:
+				wr = -1
 		else:
-			wr = -1.0
+			node.expand(game_state, probs)
 		node.update_above(-wr)
 
 	def get_moves_prob(self, state: GameState, temperature):

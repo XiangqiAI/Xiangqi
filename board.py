@@ -18,6 +18,8 @@ class GameState:
 	"""
 	def __init__(self, chessboard=None, red_move=True, last_moves=None):
 		self.red_move = red_move			# 当前是否红方回合
+		self.turns_no_progress = 0
+		self.winner = 0
 		if chessboard:
 			self.chessboard = chessboard
 		else:
@@ -174,7 +176,7 @@ class GameState:
 
 	def check(self):
 		"""
-		判断是否将军
+		判断是否被将军
 
 		:return:
 		"""
@@ -226,21 +228,21 @@ class GameState:
 		return True
 
 	def move(self, move):
-		flag = False
 		self.last_moves.pop(0)
 		self.last_moves.append(move)
 		(x, y), (x_to, y_to) = move
 		if self.chessboard[x_to, y_to]:
-			flag = True
+			self.turns_no_progress = 0
+		else:
+			self.turns_no_progress += 1
 		self.chessboard[x, y].set_position((x_to, y_to))
 		self.chessboard[x_to, y_to] = self.chessboard[x, y]
 		self.chessboard[x, y] = None
 		self.red_move = not self.red_move
-		return flag
 
 	def checkmate(self):
 		"""
-		判断是否将死
+		判断是否被将死
 
 		:return:
 		"""
@@ -261,3 +263,13 @@ class GameState:
 				if not game.check():								# 依次检查能否摆脱将军
 					return False
 		return True
+
+	def is_end(self):
+		if self.checkmate():
+			self.winner = -1 if self.red_move else 1
+			return True
+		elif self.turns_no_progress == 50:
+			self.winner = 0
+			return True
+		else:
+			return False

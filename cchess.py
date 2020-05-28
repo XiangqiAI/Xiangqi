@@ -58,11 +58,13 @@ def pvn(is_muted):										# 进行游戏
 			game_state.move(move)
 			display.move(move)
 			index = 1 - index							# index是目前回合一方
-			if game_state.checkmate():
-				if game_state.red_move:
+			if game_state.is_end():
+				if game_state.winner == 1:
+					print('红方胜')
+				elif game_state.winner == -1:
 					print('黑方胜')
 				else:
-					print('红方胜')
+					print('Tie')
 				break
 			elif game_state.check():
 				print('将军')
