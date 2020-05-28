@@ -2,6 +2,7 @@
 import numpy as np
 from board import GameState
 from .net import Net
+from .const import *
 
 
 class Node(object):
@@ -13,9 +14,9 @@ class Node(object):
 		self.U = 0
 		self.p = prior_p
 
-	def expand(self, prior_moves):
+	def expand(self, game_state: GameState, prior_moves):
 		for move, prob in prior_moves:
-			if move not in self.children:
+			if move not in self.children and game_state.can_move(move):
 				self.children[move] = Node(self, prob)
 
 	def select(self, c_puct):
@@ -42,11 +43,10 @@ class Node(object):
 
 
 class MCTS(object):
-	def __init__(self, c_puct=5, evaluation_fn=None, n_playout=1000):
+	def __init__(self, c_puct=5, n_simulation=1000):
 		self.root = Node(1.0)
 		self.c_puct = c_puct
-		self.evaluation_fn = evaluation_fn
-		self.n_playout = n_playout
+		self.n_simulation = n_simulation
 
 	@staticmethod
 	def softmax(x):
@@ -54,27 +54,30 @@ class MCTS(object):
 		probs /= np.sum(probs)
 		return probs
 
-	def playout(self, game: GameState):
+	def simulation(self, game_state: GameState):
 		node = self.root
 		while True:
 			if node.is_leaf():
 				break
 			move, node = node.select(self.c_puct)
-			game.move(move)
-		prob, wr = Net('Model').evaluation_fn(game)
-		if not game.checkmate():
-			node.expand(prob)
+			game_state.move(move)
+		probs, wr = Net('Model').evaluation_fn(game_state)
+		if not game_state.checkmate():
+			node.expand(game_state, probs)
 		else:
 			wr = -1.0
 		node.update_above(-wr)
 
-	def	get_moves_prob(self, state: GameState, temperature):
-		for i in range(self.n_playout):
+	def get_moves_prob(self, state: GameState, temperature):
+		for i in range(self.n_simulation):
 			state_copy = state.copy()
-			self.playout(state_copy)
+			self.simulation(state_copy)
 		move_visits = [(move, node.N) for move, node in self.root.children.items()]
 		moves, visits = zip(*move_visits)
-		probs = self.softmax(1.0 / temperature * np.log(np.array(visits) + 1e-10))
+		probs = np.zeros(MOVE_NUM)
+		for index in range(len(moves)):
+			probs[state.all_moves.index(moves[index])] = visits[index]
+		probs = self.softmax(1.0 / temperature * np.log(probs + 1e-10))
 		return moves, probs
 
 	def update_with_move(self, last_move):
