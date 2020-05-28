@@ -18,7 +18,7 @@ class Flatten(nn.Module):
 
 
 class Net(nn.Module):
-	def __init__(self, model=None):
+	def __init__(self, model='Model'):
 		super().__init__()
 		self.basic_net = nn.Sequential(
 			nn.Conv2d(FEATURES_NUM, 32, kernel_size=3, padding=1),
@@ -50,8 +50,10 @@ class Net(nn.Module):
 			nn.LogSoftmax(dim=1)
 		)
 		self.optimizer = torch.optim.Adam(self.parameters())
-		if model:
+		try:
 			self.load_state_dict(torch.load(model))
+		except FileNotFoundError:
+			print('Model file not found')
 
 	def forward(self, x):
 		feature_map = self.basic_net(x)
@@ -62,7 +64,7 @@ class Net(nn.Module):
 	def evaluation_fn(self, game_state: GameState):
 		state = game_state.state()
 		prob, wr = self.forward(state)
-		prob = zip(game_state.all_moves, prob)
+		prob = zip(game_state.all_moves, prob.tolist()[0])
 		return prob, wr
 
 	def train_model(self, states, wr, prob, lr):
