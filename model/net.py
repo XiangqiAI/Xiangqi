@@ -52,7 +52,7 @@ class Net(nn.Module):
 		self.optimizer = torch.optim.Adam(self.parameters())
 		try:
 			self.load_state_dict(torch.load(model))
-		except FileNotFoundError:
+		except PermissionError:
 			print('Model file not found')
 
 	def forward(self, x):
