@@ -11,7 +11,7 @@ class Train(object):
 		self.lr = 2e-3
 		self.lr_multiplier = 1.0
 		self.net = Net()
-		self.ai = AI(train=True, evaluation_fn=self.net.evaluation_fn())
+		self.ai = AI(train=True, evaluation_fn=self.net.evaluation_fn)
 		self.data_buffer = []
 		self.game_len = 0
 		self.epochs = 5
