@@ -130,7 +130,7 @@ class GameState:
 				(x_from, y_from), (x_to, y_to) = move
 				state[15 + i, x_from, y_from] = -1
 				state[15 + i, x_to, y_to] = 1
-		return state
+		return state.reshape(-1, 20, 9, 10)
 
 	@staticmethod
 	def check_pos(position):
