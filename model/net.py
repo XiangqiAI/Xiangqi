@@ -18,8 +18,9 @@ class Flatten(nn.Module):
 
 
 class Net(nn.Module):
-	def __init__(self, model='Model'):
+	def __init__(self, model='Model', device=torch.device('cuda')):
 		super().__init__()
+		self.device = device
 		self.basic_net = nn.Sequential(
 			nn.Conv2d(FEATURES_NUM, 32, kernel_size=3, padding=1),
 			nn.BatchNorm2d(32),
@@ -30,7 +31,7 @@ class Net(nn.Module):
 			nn.Conv2d(64, 128, kernel_size=3, padding=1),
 			nn.BatchNorm2d(128),
 			nn.ReLU()
-		)
+		).to(self.device)
 		self.value_net = nn.Sequential(
 			nn.Conv2d(128, 1, kernel_size=1),
 			nn.BatchNorm2d(1),
@@ -40,7 +41,7 @@ class Net(nn.Module):
 			nn.ReLU(),
 			nn.Linear(256, 1),
 			nn.Tanh()
-		)
+		).to(self.device)
 		self.policy_net = nn.Sequential(
 			nn.Conv2d(128, 1, kernel_size=1),
 			nn.BatchNorm2d(1),
@@ -48,7 +49,7 @@ class Net(nn.Module):
 			Flatten(),
 			nn.Linear(OUT_CHANNELS, MOVE_NUM),
 			nn.LogSoftmax(dim=1)
-		)
+		).to(self.device)
 		self.optimizer = torch.optim.Adam(self.parameters())
 		try:
 			self.load_state_dict(torch.load(model))
@@ -56,6 +57,7 @@ class Net(nn.Module):
 			print('Model file not found')
 
 	def forward(self, x):
+		x = x.to(self.device)
 		feature_map = self.basic_net(x)
 		wr = self.value_net(feature_map)
 		prob = self.policy_net(feature_map).exp()
@@ -69,9 +71,9 @@ class Net(nn.Module):
 
 	def train_model(self, states, wr, prob, lr):
 		self.train()
-		states = Variable(torch.tensor(states))
-		prob = Variable(torch.tensor(prob))
-		wr = Variable(torch.tensor(wr))
+		states = Variable(torch.tensor(states)).to(self.device)
+		prob = Variable(torch.tensor(prob)).to(self.device)
+		wr = Variable(torch.tensor(wr)).to(self.device)
 		for param_group in self.optimizer.param_groups:
 			param_group['lr'] = lr
 		prob_predict, wr_predict = self.forward(states)

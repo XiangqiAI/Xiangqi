@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 import random
 import numpy as np
+import torch
 from board import GameState
 from agent import AI
 from .net import Net
+from .const import USE_GPU
 
 
 class Train(object):
 	def __init__(self, batch_num=100):
 		self.lr = 2e-3
 		self.lr_multiplier = 1.0
-		self.net = Net()
+		if USE_GPU and torch.cuda.is_available():
+			device = torch.device('cuda')
+		else:
+			device = torch.device('cpu')
+		self.net = Net(device=device)
 		self.ai = AI(train=True, evaluation_fn=self.net.evaluation_fn)
 		self.data_buffer = []
 		self.game_len = 0
@@ -35,7 +41,6 @@ class Train(object):
 					wrs[np.array(players) == game_state.red_move] = -1.0
 					wrs[np.array(players) != game_state.red_move] = 1.0
 				return zip(states, probs, wrs)
-
 
 	def collect_data(self, n=1):
 		for i in range(n):
