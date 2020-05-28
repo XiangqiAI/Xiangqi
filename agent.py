@@ -6,9 +6,9 @@ from model.mcts import MCTS
 
 
 class AI:
-	def __init__(self, c_put=5, n_playout=1000, train=False):
+	def __init__(self, c_put=5, n_playout=1000, train=False, evaluation_fn=None):
 		self.train = train
-		self.mcts = MCTS(c_put, n_playout)
+		self.mcts = MCTS(c_put, n_playout, evaluation_fn)
 
 	def get_move(self, game_state, mode=0, temperature=1e-3, return_probs=False):
 		if mode == 2:

@@ -10,8 +10,8 @@ class Train(object):
 	def __init__(self, batch_num=100):
 		self.lr = 2e-3
 		self.lr_multiplier = 1.0
-		self.ai = AI(train=True)
 		self.net = Net()
+		self.ai = AI(train=True, evaluation_fn=self.net.evaluation_fn())
 		self.data_buffer = []
 		self.game_len = 0
 		self.epochs = 5

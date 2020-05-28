@@ -43,10 +43,11 @@ class Node(object):
 
 
 class MCTS(object):
-	def __init__(self, c_puct=5, n_simulation=1000):
+	def __init__(self, c_puct=5, n_simulation=1000, evaluation_fn=None):
 		self.root = Node(1.0)
 		self.c_puct = c_puct
 		self.n_simulation = n_simulation
+		self.evaluation_fn = evaluation_fn
 
 	@staticmethod
 	def softmax(x):
@@ -61,7 +62,7 @@ class MCTS(object):
 				break
 			move, node = node.select(self.c_puct)
 			game_state.move(move)
-		probs, wr = Net('Model').evaluation_fn(game_state)
+		probs, wr = self.evaluation_fn(game_state)
 		if not game_state.checkmate():
 			node.expand(game_state, probs)
 		else:
