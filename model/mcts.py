@@ -81,7 +81,7 @@ class MCTS(object):
 		for index in range(len(moves)):
 			probs[state.all_moves.index(moves[index])] = visits[index]
 		probs = self.softmax(1.0 / temperature * np.log(probs + 1e-10))
-		return moves, probs
+		return state.all_moves, probs
 
 	def update_with_move(self, last_move):
 		if last_move in self.root.children:
