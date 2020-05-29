@@ -252,16 +252,12 @@ class GameState:
 			if i and i.red == self.red_move:
 				pieces.append(i)
 		for piece in pieces:										# 找到目前能做的所有事
+			x, y = piece.position
 			for pos in piece.possible_moves(self.chessboard):
-				chess = deepcopy(piece)
-				chessboard = deepcopy(self.chessboard)
-				x, y = chess.position
+				state_copy = self.copy()
 				x_to, y_to = pos
-				chess.set_position(pos)
-				chessboard[x_to, y_to] = chess
-				chessboard[x, y] = None
-				game = GameState(chessboard, self.red_move)
-				if not game.check():								# 依次检查能否摆脱将军
+				state_copy.move(((x, y), (x_to, y_to)))
+				if not state_copy.check():							# 依次检查能否摆脱将军
 					return False
 		return True
 
