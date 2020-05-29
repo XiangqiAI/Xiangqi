@@ -3,6 +3,7 @@ import random
 import numpy as np
 from search import Search
 from model.mcts import MCTS
+from model.const import *
 
 
 class AI:
@@ -24,10 +25,15 @@ class AI:
 		elif mode == 0:
 			moves, probs = self.mcts.get_moves_prob(game_state, temperature)
 			if self.train:
-				move = np.random.choice(moves, p=0.75 * probs + 0.25 * np.random.dirichlet(0.3*np.ones(len(probs))))
+				index = np.random.choice(
+					[i for i in range(MOVE_NUM)],
+					p=0.75 * probs + 0.25 * np.random.dirichlet(0.3*np.ones(len(probs)))
+				)
+				move = moves[index]
 				self.mcts.update_with_move(move)
 			else:
-				move = np.random.choice(moves, p=probs)
+				index = np.random.choice([i for i in range(MOVE_NUM)], p=probs)
+				move = moves[index]
 				self.mcts.update_with_move(((-1, -1), (-1, -1)))
 			if return_probs:
 				return move, (moves, probs)
