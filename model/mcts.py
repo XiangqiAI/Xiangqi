@@ -16,7 +16,7 @@ class Node(object):
 	def expand(self, game_state: GameState, prior_moves):
 		for move, prob in prior_moves:
 			if move not in self.children and game_state.can_move(move):
-				self.children[move] = Node(self, prob)
+				self.children[move] = Node(prob, self)
 
 	def select(self, c_puct):
 		return max(self.children.items(), key=lambda node: node[1].get_value(c_puct))
