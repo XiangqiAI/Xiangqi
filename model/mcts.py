@@ -42,7 +42,7 @@ class Node(object):
 
 
 class MCTS(object):
-	def __init__(self, c_puct=5, n_simulation=1000, evaluation_fn=None):
+	def __init__(self, c_puct=5, n_simulation=SIMULATION_NUM, evaluation_fn=None):
 		self.root = Node(1.0)
 		self.c_puct = c_puct
 		self.n_simulation = n_simulation

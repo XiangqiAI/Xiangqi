@@ -5,11 +5,11 @@ import torch
 from board import GameState
 from agent import AI
 from .net import Net
-from .const import USE_GPU
+from .const import *
 
 
 class Train(object):
-	def __init__(self, batch_num=100):
+	def __init__(self):
 		self.lr = 2e-3
 		self.lr_multiplier = 1.0
 		if USE_GPU and torch.cuda.is_available():
@@ -20,9 +20,9 @@ class Train(object):
 		self.ai = AI(train=True, evaluation_fn=self.net.evaluation_fn)
 		self.data_buffer = []
 		self.game_len = 0
-		self.epochs = 5
-		self.batch_size = 512
-		self.batch_num = batch_num
+		self.epochs = EPOCHES
+		self.batch_size = BATCH_SIZE
+		self.batch_num = BATCH_NUM
 		self.kl_trigger = 0.2
 
 	def self_play(self):
