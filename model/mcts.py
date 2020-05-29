@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from board import GameState
-from .net import Net
 from .const import *
 
 

@@ -2,6 +2,7 @@
 from display import Display
 from board import GameState
 from agent import AI
+from model.net import Net
 from model.train import Train
 import sys
 import random
@@ -37,7 +38,7 @@ def get_move(agent, game, layout: Display = None):					# 获取下一步落子
 	if agent == 'player':
 		return layout.get_move(game_state=game)
 	else:
-		return AI.get_move(game_state=game)
+		return agent.get_move(game_state=game)
 
 
 def pvn(is_muted):										# 进行游戏
@@ -50,7 +51,9 @@ def pvn(is_muted):										# 进行游戏
 		if mode == 'pvp':
 			agents = ('player', 'player')
 		elif mode == 'pvc':
-			agents = ('player', 'AI')
+			net = Net()
+			ai = AI(evaluation_fn=net.evaluation_fn)
+			agents = ('player', ai)
 			index = random.randint(0, 1)
 		display.init(game_state)
 		while True:										# 双方依次进行
