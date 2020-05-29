@@ -2,6 +2,7 @@
 import random
 import numpy as np
 from search import Search
+from board import GameState
 from model.mcts import MCTS
 from model.const import *
 
@@ -11,7 +12,7 @@ class AI:
 		self.train = train
 		self.mcts = MCTS(c_puct=c_puct, evaluation_fn=evaluation_fn)
 
-	def get_move(self, game_state, mode=0, temperature=1e-3, return_probs=False):
+	def get_move(self, game_state: GameState, mode=0, temperature=1e-3, return_probs=False):
 		if mode == 2:
 			moves = []
 			for move in game_state.get_legal_moves():
@@ -24,17 +25,21 @@ class AI:
 			return search.alpha_beta(game_state)
 		elif mode == 0:
 			moves, probs = self.mcts.get_moves_prob(game_state, temperature)
-			if self.train:
-				index = np.random.choice(
-					[i for i in range(MOVE_NUM)],
-					p=0.75 * probs + 0.25 * np.random.dirichlet(0.3*np.ones(len(probs)))
-				)
-				move = moves[index]
-				self.mcts.update_with_move(move)
-			else:
-				index = np.random.choice([i for i in range(MOVE_NUM)], p=probs)
-				move = moves[index]
-				self.mcts.update_with_move(((-1, -1), (-1, -1)))
+			move = ((-1, -1), (-1, -1))
+			update = None
+			while not game_state.can_move(move):
+				if self.train:
+					index = np.random.choice(
+						[i for i in range(MOVE_NUM)],
+						p=0.75 * probs + 0.25 * np.random.dirichlet(0.3*np.ones(len(probs)))
+					)
+					move = moves[index]
+					update = move
+				else:
+					index = np.random.choice([i for i in range(MOVE_NUM)], p=probs)
+					move = moves[index]
+					update = ((-1, -1), (-1, -1))
+			self.mcts.update_with_move(update)
 			if return_probs:
 				return move, (moves, probs)
 			else:
