@@ -436,14 +436,19 @@ class Shuai(Chess):
 			if i and i.name == 'shuai' and (i.red != self.red):
 				x_enemy, y_enemy = i.position
 				if x_enemy == x:
-					for y_pos in range(min(y_enemy, y) + 1, max(y_enemy, y)):
-						if chessboard[x, y_pos]:
-							break
-					else:
-						if y_enemy == y:
+					if y_enemy == y:
+						for y_pos in range(min(self.position[1], y) + 1, max(self.position[1], y)):
+							if chessboard[x, y_pos]:
+								break
+						else:
 							return True
-						print('白脸将')
-						return False
+					else:
+						for y_pos in range(min(y_enemy, y) + 1, max(y_enemy, y)):
+							if chessboard[x, y_pos]:
+								break
+						else:
+							print('白脸将')
+							return False
 				break
 		if self.is_legal_action(dx, dy, end_position):
 			if not self.position_has_chess(end_position, chessboard):  # 终点处无棋子
