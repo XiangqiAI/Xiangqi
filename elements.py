@@ -447,7 +447,7 @@ class Shuai(Chess):
 							if chessboard[x, y_pos]:
 								break
 						else:
-							print('白脸将')
+							# print('白脸将')
 							return False
 				break
 		if self.is_legal_action(dx, dy, end_position):

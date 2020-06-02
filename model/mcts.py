@@ -14,7 +14,11 @@ class Node(object):
 		self.p = prior_p
 
 	def expand(self, game_state: GameState, prior_moves):
+		index = 1
 		for move, prob in prior_moves:
+			if index % 500 == 0:
+				print('Expand move {}'.format(index))
+			index += 1
 			if move not in self.children and game_state.can_move(move):
 				self.children[move] = Node(prob, self)
 
@@ -73,6 +77,7 @@ class MCTS(object):
 
 	def get_moves_prob(self, state: GameState, temperature):
 		for i in range(self.n_simulation):
+			print('Simulation: {}'.format(i+1))
 			state_copy = state.copy()
 			self.simulation(state_copy)
 		move_visits = [(move, node.N) for move, node in self.root.children.items()]

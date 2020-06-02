@@ -36,6 +36,7 @@ class Train(object):
 			probs.append(moves_probs)
 			players.append(game_state.red_move)
 			game_state.move(move)
+			print('Move: {}'.format(move))
 			if game_state.is_end():
 				wrs = np.zeros(len(players))
 				if game_state.winner:

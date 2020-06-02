@@ -214,17 +214,17 @@ class GameState:
 		if not chessboard[x, y]:										# 出发的位置不存在棋子
 			return False
 		if self.red_move != chessboard[x, y].red:						# 走棋颜色错误
-			print('Not your turn')
+			# print('Not your turn')
 			return False
 		if not chessboard[x, y].is_legal_move(end, chessboard):			# 该棋子不能动
-			print('Illegal move')
+			# print('Illegal move')
 			return False
 		chessboard[x, y].set_position(end)
 		chessboard[x_to, y_to] = chessboard[x, y]
 		chessboard[x, y] = None
 		game = GameState(chessboard, self.red_move)
 		if game.check():												# 检查是否送将
-			print('不能送将')												# Todo: 把不能送将显示出来
+			# print('不能送将')												# Todo: 把不能送将显示出来
 			return False
 		return True
 
