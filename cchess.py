@@ -25,12 +25,14 @@ def read_command(argv):									# 读取命令行参数
 	parser = OptionParser(usage_str)
 	parser.add_option('-m', '--mute', action='store_true', dest='isMuted', help='mute the game', default=False)
 	parser.add_option('-t', '--train', action='store_true', dest='isTrainMode', help='train mode', default=False)
+	parser.add_option('-d', '--difficulty', dest='difficulty', help='game difficulty', default=1)
 	options, junk = parser.parse_args(argv)
 	if len(junk):
 		raise Exception('Options not expected' + str(junk))
 	args = dict()
 	args['is_muted'] = options.isMuted
 	args['is_train_mode'] = options.isTrainMode
+	args['difficulty'] = options.difficulty
 	return args
 
 
@@ -41,7 +43,7 @@ def get_move(agent, game, layout: Display = None):					# 获取下一步落子
 		return agent.get_move(game_state=game)
 
 
-def pvn(is_muted):										# 进行游戏
+def pvn(is_muted, difficulty):										# 进行游戏
 	while True:
 		game_state = GameState()
 		display = Display(is_muted)
@@ -52,7 +54,7 @@ def pvn(is_muted):										# 进行游戏
 			agents = ('player', 'player')
 		elif mode == 'pvc':
 			net = Net()
-			ai = AI(evaluation_fn=net.evaluation_fn)
+			ai = AI(evaluation_fn=net.evaluation_fn, difficulty=difficulty)
 			agents = ('player', ai)
 			index = random.randint(0, 1)
 		display.init(game_state)
@@ -74,12 +76,12 @@ def pvn(is_muted):										# 进行游戏
 				display.check(game_state.red_move)
 
 
-def run(is_muted, is_train_mode):
+def run(is_muted, is_train_mode, difficulty):
 	if is_train_mode:
 		instance = Train()
 		instance.run()
 	else:
-		pvn(is_muted)
+		pvn(is_muted, difficulty)
 
 
 if __name__ == '__main__':

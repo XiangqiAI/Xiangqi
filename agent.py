@@ -8,22 +8,23 @@ from model.const import *
 
 
 class AI:
-	def __init__(self, c_puct=5, train=False, evaluation_fn=None):
+	def __init__(self, c_puct=5, train=False, evaluation_fn=None, difficulty=1):
+		self.difficulty = difficulty
 		self.train = train
 		self.mcts = MCTS(c_puct=c_puct, evaluation_fn=evaluation_fn)
 
-	def get_move(self, game_state: GameState, mode=0, temperature=1e-3, return_probs=False):
-		if mode == 2:
+	def get_move(self, game_state: GameState, temperature=1e-3, return_probs=False):
+		if self.difficulty == 0:
 			moves = []
 			for move in game_state.get_legal_moves():
 				if game_state.can_move(move):
 					moves.append(move)
 			choice = random.choice(range(len(moves)))
 			return moves[choice]
-		elif mode == 1:
+		elif self.difficulty == 1:
 			search = Search()
 			return search.alpha_beta(game_state)
-		elif mode == 0:
+		elif self.difficulty == 2:
 			moves, probs = self.mcts.get_moves_prob(game_state, temperature)
 			move = ((-1, -1), (-1, -1))
 			update = None
