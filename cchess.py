@@ -25,7 +25,7 @@ def read_command(argv):									# 读取命令行参数
 	parser = OptionParser(usage_str)
 	parser.add_option('-m', '--mute', action='store_true', dest='isMuted', help='mute the game', default=False)
 	parser.add_option('-t', '--train', action='store_true', dest='isTrainMode', help='train mode', default=False)
-	parser.add_option('-d', '--difficulty', dest='difficulty', help='game difficulty', default=1)
+	parser.add_option('-d', '--difficulty', dest='difficulty', help='game difficulty', default=2)
 	options, junk = parser.parse_args(argv)
 	if len(junk):
 		raise Exception('Options not expected' + str(junk))
@@ -53,8 +53,11 @@ def pvn(is_muted, difficulty):										# 进行游戏
 		if mode == 'pvp':
 			agents = ('player', 'player')
 		elif mode == 'pvc':
-			net = Net()
-			ai = AI(evaluation_fn=net.evaluation_fn, difficulty=difficulty)
+			if difficulty == 2:
+				net = Net()
+				ai = AI(evaluation_fn=net.evaluation_fn, difficulty=difficulty)
+			else:
+				ai = AI(difficulty=difficulty)
 			agents = ('player', ai)
 			index = random.randint(0, 1)
 		display.init(game_state)

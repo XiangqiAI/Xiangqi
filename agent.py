@@ -8,10 +8,11 @@ from model.const import *
 
 
 class AI:
-	def __init__(self, c_puct=5, train=False, evaluation_fn=None, difficulty=1):
-		self.difficulty = difficulty
+	def __init__(self, c_puct=5, train=False, evaluation_fn=None, difficulty=2):
+		self.difficulty = int(difficulty)
 		self.train = train
-		self.mcts = MCTS(c_puct=c_puct, evaluation_fn=evaluation_fn)
+		if self.difficulty == 2:
+			self.mcts = MCTS(c_puct=c_puct, evaluation_fn=evaluation_fn)
 
 	def get_move(self, game_state: GameState, temperature=1e-3, return_probs=False):
 		if self.difficulty == 0:
@@ -45,3 +46,6 @@ class AI:
 				return move, (moves, probs)
 			else:
 				return move
+
+	def __str__(self):
+		return 'AI on difficulty {}'.format(self.difficulty)
